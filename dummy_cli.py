@@ -4,13 +4,13 @@ import json
 import re
 
 # words ruleset
-with open('data/dummy-rules.json', 'r') as file:
+with open('dummy-rules.json', 'r') as file:
     rules = json.load(file)
 # phrases ruleset
-with open('data/phrases.json', 'r') as file:
+with open('phrases.json', 'r') as file:
     phrases = json.load(file)
 # emojis
-with open('data/emoji.json', 'r', encoding='utf-8') as file:
+with open('emoji.json', 'r', encoding='utf-8') as file:
     emojis = json.load(file)
 
 # set randomization chances
