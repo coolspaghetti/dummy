@@ -22,6 +22,8 @@ missing_period_chance = 0.2
 missing_space_chance = 0.2
 wrong_letter_chance = 0.1
 no_comma_chance = 0.8
+hashtag_chance = 0.7
+emoji_chance = 0.5
 
 # get user input
 print("*-*-**-*-**-*-**-*-**-*-**-*-**-*-*")
@@ -75,10 +77,6 @@ def replace_words(text, rules):
 # capitalize sentences
 def capitalize_sentences(sentences):
     return [sentence.capitalize() for sentence in sentences]
-
-# UNFINISHED add hashtags at the end of a sentence
-def add_hashtags(sentences):
-    pass
 
 #create and return output
 def finish_output(sentences):
@@ -142,6 +140,9 @@ for word in output_words:
         word = word.replace('i', 'j')  
     # otherwise just add the word
     final_output.append(word)
+
+# apply hashtags
+
 
 # combine final output
 final_output = ' '.join(final_output)
