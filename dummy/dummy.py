@@ -2,8 +2,7 @@ import reflex as rx
 import random
 import json
 import re
-from reflex import State
-from rxconfig import config
+
 # words ruleset
 with open('dummy-rules.json', 'r') as file:
     rules = json.load(file)
@@ -18,7 +17,7 @@ with open('emoji.json', 'r', encoding='utf-8') as file:
 def dummify_text(user_input):
     global rules, phrases, emojis
 
-    # Randomization chances
+    # Randomization chances 
     parentheses_chance = 0.95
     period_chance = 0.05
     whitespace_chance = 0.01
@@ -111,102 +110,73 @@ def dummify_text(user_input):
     # Step 9: Combine the final output
     return ' '.join(final_output)
 
+class State(rx.State):
+    input_text: str = ""  
+    output_text: str = ""
 
-# state class for managing app state
-class DummyState(State):
-    user_input: str = ""  # store user input
-    output: str = ""  # store processed output
+    def dummify_input_text(self):
+        self.output_text = dummify_text(self.input_text)
 
-    def set_user_input(self, value):
-        self.user_input = value  # Update state with new user input
-    
-    def process_text(self):
-        print(f"User input before processing: {self.user_input}")
-        # Process and update output
-        self.output = dummify_text(self.user_input)
-        print(f"Output after processing: {self.output}")
-        # Automatically trigger a UI update by setting the state
-        self.set_output(self.output)  
+    def capitalize_text(self):
+        self.output_text = self.input_text.upper()
 
-
-# define the global style
 style = {
-    "background": "#f6e0b6"
+    "background": "#f6e0b6",
 }
 
-# define a function for the main page content
 def index():
-    return rx.stack(
+    return rx.vstack(
         rx.box(
-            height="2vh",
-            bg="#f6a040",
             width="100%",
+            bg="#f6a040",
+            height="2vh",
         ),
         rx.flex(
-            "dummy generator",
-            bg="#96331a",
+            "dummify",
             width="100%",
-            color="#f6e0b6",
-            height="30vh",
+            bg="#96331a",
+            height="15vh",
             font_family="Smokum, serif",
             align="center",
             justify="center",
-            font_size="7em"
+            font_size="6em",
+            color="#f6e0b6",
         ),
         rx.input(
-            placeholder="Type something",
-            value=DummyState.user_input,
-            on_change=DummyState.set_user_input,  # Correct method for state update
-            width="40%",
-            height="16vh",
-            margin="8em auto 1em auto",
-            color="#8b3a23",
-            border="dashed #96331a 2px",
-            bg="None",
-            word_wrap="break-word"
+            placeholder="Say something...",
+            value=State.input_text,
+            on_change=State.set_input_text,
+            border="#f6a040 solid 2px",
+            margin="10vh auto 5vh auto",
+            width="70%",
+            height="20vh",
         ),
         rx.button(
             "dummify",
-            on_click=DummyState.process_text,  # Properly link to state method
-            width="20%",
-            height="3vh",
+            on_click=State.dummify_input_text,
             bg="#96331a",
-            color="#f6e0b6",
-            margin="0 auto 4em auto"
-        ),
-        rx.flex(
-            rx.text(DummyState.output),  # Correct state access for display
-            width="40%",
-            height="16vh",
-            margin="0.2em auto",
-            align="center",
-            justify="center",
-            bg="None",
-            border="dashed #96331a 2px",
-            border_radius="2%",
-            color="#96331a",
+            margin="0 auto 5vh auto"
         ),
         rx.box(
-            "dummify your text, following the writing patterns of a certain celebrity i'm not gonna disclose. iykyk..",
-            bg="#96331a",
+            rx.heading(
+                State.output_text,
+                spacing="0",
+                align="center",
+                color="#f6a040",
+            ),
+            padding="20px",
             width="100%",
-            position="fixed",
-            bottom="0",
-            font_size="0.8em"
+            text_wrap="wrap",
+            margin_x="auto",
+            word_break="break-word"
         ),
-        flex_direction="column",
-        width="100%",
         spacing="0"
     )
 
-# create the app instance
 app = rx.App(
-    style=style,
     stylesheets=[
         "https://fonts.googleapis.com/css2?family=Smokum&display=swap"
     ],
-    state=DummyState
+    style=style
 )
-
-# add the main page to the app
 app.add_page(index)
