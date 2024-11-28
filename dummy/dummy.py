@@ -142,20 +142,23 @@ def index():
             font_size="6em",
             color="#f6e0b6",
         ),
-        rx.input(
+        rx.text_area(
             placeholder="Say something...",
             value=State.input_text,
             on_change=State.set_input_text,
-            border="#f6a040 solid 2px",
-            margin="10vh auto 5vh auto",
-            width="70%",
+            resize="vertical",
             height="20vh",
+            width="70%",
+            margin="10vh auto",
+            color="#96331a",
+            border="#f6a040 solid 2px",
         ),
         rx.button(
             "dummify",
             on_click=State.dummify_input_text,
             bg="#96331a",
-            margin="0 auto 5vh auto"
+            margin="0 auto 5vh auto",
+            padding="20px"
         ),
         rx.box(
             rx.heading(
@@ -164,7 +167,7 @@ def index():
                 align="center",
                 color="#f6a040",
             ),
-            padding="20px",
+            padding="2em",
             width="100%",
             text_wrap="wrap",
             margin_x="auto",
